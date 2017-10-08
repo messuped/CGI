@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projeto CGI</title>
+</head>
+<body onload = "init();">
+
+    <canvas id="canvas" width="800" height = "800">
+        Your browser does not support HTML5
+    </canvas>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute float vSize;
+        uniform float time;
+
+        void main(){
+            gl_Position = vPosition;
+            gl_PointSize = vSize;
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        uniform vec4 color;
+        void main() {
+
+        }
+    </script>
+
+    <script type="text/javascript" src="Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="Common/initShaders.js"></script>
+    <script type="text/javascript" src="Common/MV.js"></script>
+    <script src="projeto.js"></script>
+
+<div style="position: fixed; top: 10px; left: 820px; ">
+    <!-- Formas -->
+    <font size = "14"><i>Shapes </i></font>
+
+    <br><br>
+
+    <select>
+        <option>Quadrado</option>
+        <option></option>
+    </select>
+
+    <br><br>
+
+    <!-- Cores -->
+    <font size = "14"><i>Colors</i></font>
+
+    <br><br>
+
+    <font color = "red"><i>Red</i></font><br>
+    <input id = "red" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+
+    <font color = "green"><i>Green</i></font><br>
+    <input id = "green" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+
+    <font color = "blue"><i>Blue</i></font><br>
+    <input id = "blue" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+
+    <i>Alpha</i><br>
+    <input id = "alpha" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+
+
+    <br><br>
+
+    <!-- Auto -->
+    <i>Automatic</i>
+    <input id = "auto" type="checkbox" value="false">
+</div>
+
+</body>
+</html>
