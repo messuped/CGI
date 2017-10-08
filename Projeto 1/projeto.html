@@ -26,7 +26,7 @@
 
         uniform vec4 color;
         void main() {
-
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
         }
     </script>
 
@@ -54,16 +54,16 @@
     <br><br>
 
     <font color = "red"><i>Red</i></font><br>
-    <input id = "red" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+    <input id = "red" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "green"><i>Green</i></font><br>
-    <input id = "green" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+    <input id = "green" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "blue"><i>Blue</i></font><br>
-    <input id = "blue" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+    <input id = "blue" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
 
     <i>Alpha</i><br>
-    <input id = "alpha" type="range" max = 1.0 min = 0.0 step = 0.0001 onchange="changeColors()"><br>
+    <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
 
 
     <br><br>

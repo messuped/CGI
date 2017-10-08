@@ -8,9 +8,15 @@ window.onload = function init() {
 
     if(!gl) { alert("WebGL isn't available"); }
 
+    // Three vertices
+    var vertices = [
+        vec2(-0.5,-0.5),
+        vec2(0.5,-0.5),
+        vec2(0,0.5),
+    ];
+
     // Configure WebGL
     gl.viewport(0,0,canvas.width, canvas.height);
-    gl.clearColor(0.5, 0.3, 0.4, 0.6);
 
     // Load shaders and initialize attribute buffers
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
@@ -25,7 +31,7 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
-    render();
+    changeColors();
 }
 
 function changeColors(){
@@ -35,5 +41,5 @@ function changeColors(){
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, 4);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
 }
