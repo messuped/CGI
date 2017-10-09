@@ -13,7 +13,15 @@
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
         attribute float vSize;
+        attribute vec4 vColor;
+        varying vec4 fColor;
+
+        varying vec4 color;
         uniform float time;
+
+        mat2 rotate2d(float _angle){
+          return mat2(cos(_angle),-sin(_angle), sin(_angle),cos(_angle));
+        }
 
         void main(){
             gl_Position = vPosition;
@@ -22,12 +30,25 @@
     </script>
 
     <script id="fragment-shader" type="x-shader/x-fragment">
-        precision mediump float;
+    precision mediump float;
+    varying vec4 color;
 
-        uniform vec4 color;
-        void main() {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        }
+    vec2 getPos(vec2 p){
+        return vec2(2.0, -2.0) * p - vec2(1.0, -1.0);
+    }
+
+vec4 circle(vec4 clr) {
+    float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+    if ( dist > 1.0 )
+       discard;
+    return clr;
+}
+
+
+void main() {
+    gl_FragColor = circle(color);
+}
+
     </script>
 
     <script type="text/javascript" src="Common/webgl-utils.js"></script>
@@ -36,7 +57,7 @@
     <script src="projeto.js"></script>
 
 <div style="position: fixed; top: 10px; left: 820px; ">
-    <!-- Formas -->
+    <!-- Shapes -->
     <font size = "14"><i>Shapes </i></font>
 
     <br><br>
@@ -48,7 +69,7 @@
 
     <br><br>
 
-    <!-- Cores -->
+    <!-- Colors -->
     <font size = "14"><i>Colors</i></font>
 
     <br><br>
@@ -63,8 +84,12 @@
     <input id = "blue" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
 
     <i>Alpha</i><br>
-    <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
+    <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()">
 
+    <br><br>
+
+    <!-- Preview -->
+    <div id = "preview" style = "width: 130px; height: 30px; background-color: grey"/>
 
     <br><br>
 
