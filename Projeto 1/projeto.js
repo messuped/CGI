@@ -15,7 +15,6 @@ var colors;
 var auto;
 var sizes;
 var sizeBuffer;
-var step;
 var shape;
 
 window.onload = function init() {
@@ -107,7 +106,6 @@ window.onload = function init() {
 
       //sending in the size
       sizes.push((Math.random() * 100) + 51);
-      step.push(1.0);
 
       var t = [sizes[sizes.length - 1]];
       gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
@@ -141,10 +139,7 @@ function toggleAutoMode(){
 function bloom(){
   for (i = 0; i < vertices.length; i++){
 
-    if (sizes[i] <= 40 || sizes[i] >= 160)
-      step[i] *= -1.0;
-
-    sizes[i] += step[i];
+    sizes[i] *= Math.sin(new Date(milliseconds).getMilliseconds());
 
     var t = [sizes[i]];
     gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
