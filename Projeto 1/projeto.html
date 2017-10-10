@@ -1,53 +1,60 @@
+<!--
+  1º Projeto CGI
+  Autor: Eduardo Bezerra Subtil - 48492
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Projeto CGI</title>
-</head>
-<body onload = "init();">
-
-    <canvas id="canvas" width="800" height = "800">
-        Your browser does not support HTML5
-    </canvas>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
         attribute float vSize;
         attribute vec4 vColor;
+        attribute float vShape;
+
+        varying float fShape;
         varying vec4 fColor;
-
-        varying vec4 color;
         uniform float time;
-
-        mat2 rotate2d(float _angle){
-          return mat2(cos(_angle),-sin(_angle), sin(_angle),cos(_angle));
-        }
 
         void main(){
             gl_Position = vPosition;
             gl_PointSize = vSize;
+            fColor = vColor;
+            fShape = vShape;
         }
     </script>
 
     <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
-    varying vec4 color;
+    varying vec4 fColor;
+    varying float fShape;
 
     vec2 getPos(vec2 p){
         return vec2(2.0, -2.0) * p - vec2(1.0, -1.0);
     }
 
-vec4 circle(vec4 clr) {
-    float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
-    if ( dist > 1.0 )
-       discard;
-    return clr;
-}
+    mat2 rotate2d(float _angle){
+      return mat2(cos(_angle),-sin(_angle), sin(_angle),cos(_angle));
+    }
+
+    vec4 circle(vec4 clr) {
+      float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+      if ( dist > 1.0 )
+        discard;
+      return clr;
+    }
+
+    vec4 square(vec4 sqr){
+        return sqr;
+    }
 
 
-void main() {
-    gl_FragColor = circle(color);
-}
+    void main() {
+          gl_FragColor = circle(fColor);
+
+    }
 
     </script>
 
@@ -56,14 +63,21 @@ void main() {
     <script type="text/javascript" src="Common/MV.js"></script>
     <script src="projeto.js"></script>
 
+</head>
+<body>
+
+    <canvas id="canvas" width="800" height = "800">
+        Your browser does not support HTML5
+    </canvas>
+
 <div style="position: fixed; top: 10px; left: 820px; ">
     <!-- Shapes -->
     <font size = "14"><i>Shapes </i></font>
 
     <br><br>
 
-    <select>
-        <option>Quadrado</option>
+    <select id = "shapes">
+        <option value = 0.0>Quadrado</option>
         <option></option>
     </select>
 
@@ -75,27 +89,31 @@ void main() {
     <br><br>
 
     <font color = "red"><i>Red</i></font><br>
-    <input id = "red" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
+    <input id = "red" type="range" value = 0.5 max = 1.0 min = 0.0
+    step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "green"><i>Green</i></font><br>
-    <input id = "green" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
+    <input id = "green" type="range" value = 0.5 max = 1.0 min = 0.0
+    step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "blue"><i>Blue</i></font><br>
-    <input id = "blue" type="range" max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()"><br>
+    <input id = "blue" type="range" value = 0.5 max = 1.0 min = 0.0
+    step = 0.0001 onmousemove="changeColors()"><br>
 
     <i>Alpha</i><br>
-    <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0 step = 0.0001 onmousemove="changeColors()">
+    <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0
+    step = 0.0001 onmousemove="changeColors()">
 
     <br><br>
 
     <!-- Preview -->
-    <div id = "preview" style = "width: 130px; height: 30px; background-color: grey"/>
+    <div id = "preview" style = "width: 130px; height: 30px;
+        background-color: grey"/>
 
-    <br><br>
+    <br><br><br>
 
     <!-- Auto -->
-    <i>Automatic</i>
-    <input id = "auto" type="checkbox" value="false">
+    <button type = "button" onclick="toggleAutoMode()">(╯◕ ³◕）╯︵ ┻━┻</button>
 </div>
 
 </body>
