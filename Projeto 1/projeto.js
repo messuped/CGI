@@ -30,7 +30,6 @@ window.onload = function init() {
     auto = false;
     vertices = [];
     sizes = [];
-    step = [];
     shape = document.getElementById("shapes");
 
 
@@ -83,42 +82,37 @@ window.onload = function init() {
     gl.enableVertexAttribArray(vShape);
 
     canvas.addEventListener("click", function (e) {
-      console.log("x:" + e.offsetX + " y:"+ e.offsetY);
 
-      /*
-      TO BE OPTIMIZED
-      */
-      var x = -1 + (2*e.offsetX/canvas.width);
-      var y = -1 + (2*(canvas.height - e.offsetY)/canvas.height);
+        /*
+        TO BE OPTIMIZED
+        */
+        var x = -1 + (2*e.offsetX/canvas.width);
+        var y = -1 + (2*(canvas.height - e.offsetY)/canvas.height);
 
-      vertices.push(vec2(x, y));
+        vertices.push(vec2(x, y));
 
-      //sending in the vertices
-      gl.bindBuffer(gl.ARRAY_BUFFER, pointsBuffer);
-      gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2'] * nVertices,
-        flatten(vec2(x, y)));
+        //sending in the vertices
+        gl.bindBuffer(gl.ARRAY_BUFFER, pointsBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2'] * nVertices,
+            flatten(vec2(x, y)));
 
-      //sending in the colors
-      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-      gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4'] * nVertices,
-        flatten(vec4(red.value, green.value, blue.value, alpha.value)));
+        //sending in the colors
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4'] * nVertices,
+            flatten(vec4(red.value, green.value, blue.value, alpha.value)));
 
 
-      //sending in the size
-      sizes.push((Math.random() * 100) + 51);
+        //sending in the size
+        sizes.push((Math.random() * 50) + 5);
 
-      var t = [sizes[sizes.length - 1]];
-      gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
-      gl.bufferSubData(gl.ARRAY_BUFFER, 4 * sizes.length,
-        flatten(t));
+        /*//sending in the shape
+          gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
+          gl.bufferSubData(gl.ARRAY_BUFFER, 4 * sizes.length,
+              flatten(shapes.value))*/
 
-      //sending in the shape
-        gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * sizes.length,
-            flatten(shapes.value))
-
-      nVertices++;
+        nVertices++;
     });
+
     gl.enable(gl.BLEND);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     render();
@@ -133,19 +127,24 @@ function changeColors(){
 }
 
 function toggleAutoMode(){
-  auto = !auto;
+    auto = !auto;
 }
 
 function bloom(){
-  for (i = 0; i < vertices.length; i++){
+    for (i = 0; i < vertices.length; i++){
 
-    sizes[i] *= Math.sin(new Date(milliseconds).getMilliseconds());
+        var first = new Date().getTime();
 
-    var t = [sizes[i]];
-    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
-      flatten(t));
-  }
+        var sinVal = Math.sin(i + first / 1000);
+
+        var s = Math.floor(1.25 * sizes[i] + sinVal * sizes[i]);
+
+        var t = [s];
+        gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
+            flatten(t));
+
+    }
 }
 
 function render() {
