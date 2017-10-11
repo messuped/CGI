@@ -6,24 +6,29 @@
 var canvas;
 var gl;
 var rgba;
+var shape;
 var vertices;
 var auto;
 var sizeShapeSpeedBuffer;
 var sizeShapeSpeed;
+var sSS;
 
 window.onload = function init() {
 
     canvas = document.getElementById("canvas");
     gl = WebGLUtils.setupWebGL(canvas);
+
     if(!gl) { alert("WebGL isn't available"); }
 
     rgba = [document.getElementById("red"),
         document.getElementById("green"),
         document.getElementById("blue"),
         document.getElementById("alpha")];
-    
+
+    shape = document.getElementById("shapes");
     auto = false;
     vertices = [];
+    vSS = [];
 
 
     // Configure WebGL
@@ -61,7 +66,7 @@ window.onload = function init() {
 
     // Associate our shader variables with our data buffer - sizeShapeSpeed buffer
     sizeShapeSpeed = gl.getAttribLocation(program, "sizeShapeSpeed");
-    gl.vertexAttribPointer(sizeShapeSpeed, 1, gl.FLOAT_VEC3, false, 0, 0);
+    gl.vertexAttribPointer(sizeShapeSpeed, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(sizeShapeSpeed);
 
     canvas.addEventListener("click", function (e) {
@@ -76,25 +81,23 @@ window.onload = function init() {
 
         //sending in the vertices
         gl.bindBuffer(gl.ARRAY_BUFFER, pointsBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2'] * nVertices,
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2'] * (vertices.length - 1) ,
             flatten(vec2(x, y)));
 
         //sending in the colors
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4'] * nVertices,
-            flatten(vec4(red.value, green.value, blue.value, alpha.value)));
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4'] * (vertices.length - 1),
+            flatten(vec4(rgba[0].value, rgba[1].value, rgba[2].value, rgba[3].value)));
 
 
-        //sending in the size
-        sizeShapeSpeed[0].push((Math.random() * 100) + 50);
+        //setting up the vec3
+        vSS.push([(Math.random() * 100) + 50, shape.value, Math.random() - 0.5]);
 
-        //sending in the shape
-        gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * nVertices,
-            flatten(sizeShapeSpeed[1].value))
+        //sending in the size as 0, shape and speed as is
+        gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec3'] * (vertices.length - 1),
+            flatten(vec3(0.0, vSS[vertices.length - 1][1], vSS[vertices.length - 1][2])));
 
-
-        nVertices++;
     });
 
     gl.enable(gl.BLEND);
@@ -105,10 +108,10 @@ window.onload = function init() {
 
 function changeColors(){
     document.getElementById("preview").style.backgroundColor = "rgba("
-        + Math.floor(255 * red.value) + ","
-        + Math.floor(255 * green.value) + ","
-        + Math.floor(255 * blue.value) + ","
-        + alpha.value + ")";
+        + Math.floor(255 * rgba[0].value) + ","
+        + Math.floor(255 * rgba[1].value) + ","
+        + Math.floor(255 * rgba[2].value) + ","
+        + rgba[3].value + ")";
 }
 
 function toggleAutoMode(){
@@ -117,28 +120,21 @@ function toggleAutoMode(){
 
 function bloom(){
 
-    sizeShapeSpeed[2][0] += 0.05;
-
-    for (i = 0; i < sizeShapeSpeed[0].length; i++){
+    for (i = 0; i < vSS.length; i++){
 
         var first = new Date().getTime();
 
         var sinVal = Math.sin(i + first / (500 * 0.6 + 0.5));
 
-        var s = Math.floor(sizeShapeSpeed[0][i] + 0.60 * sinVal * sizeShapeSpeed[0][i]);
-        var t = [s];
+        var s = Math.floor(vSS[i][0] + 0.60 * sinVal * vSS[i][0]);
 
-        //sending in the size
-        gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
-            flatten(t));
+        //increasing theta angle
+        vSS[i][2] += 0.1;
 
-        //sending in the rotation
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, rotBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
-            flatten([rotate]));
-
+        //sending in the size, shape and speed
+        gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec3'] * i,
+            flatten(vec3(s, vSS[i][1], vSS[i][2])));
     }
 }
 

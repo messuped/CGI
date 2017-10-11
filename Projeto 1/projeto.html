@@ -40,25 +40,44 @@
       return mat2(cos(_angle),-sin(_angle), sin(_angle),cos(_angle));
     }
 
+    vec4 nos(vec4 n){
+        float theta = atan(getPos(gl_PointCoord));
+
+        if (theta > 3 || < 6)
+            discard;
+
+        return n;
+    }
+
+    vec4 cross(vec4 crs){
+
+
+        return crs;
+    }
+
     vec4 hollowSqr(vec4 hsq){
        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
-       if ( dist <= 1.0 )
-        discard;
+       vec2 aux = getPos(gl_PointCoord) * rotate2d(fSpeed);
+
+       if (aux.s < -1.0 || aux.s > 1.0 || aux.t < -1.0 || aux.t > 1.0 || dist <= 1.0)
+            discard;
+
       return hsq;
     }
 
     vec4 circle(vec4 clr) {
       float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
-      if ( dist > 1.0 )
+
+      if (dist > 1.0 )
         discard;
+
       return clr;
     }
 
     vec4 square(vec4 sqr){
-        vec2 aux = getPos(gl_PointCoord);
-        aux = aux * rotate2d(fSpeed);
+        vec2 aux = getPos(gl_PointCoord) * rotate2d(fSpeed);
 
-        if (aux.s < -0.4 || aux.s > 0.4 || aux.t < -0.4 || aux.t > 0.4)
+        if (aux.s < -0.7 || aux.s > 0.7 || aux.t < -0.7 || aux.t > 0.7)
             discard;
 
         return sqr;
@@ -76,6 +95,13 @@
 
         else if (fShape == 2.0)
             gl_FragColor = hollowSqr(fColor);
+
+        else if (fShape == 3.0)
+            gl_FragColor = cross(fColor);
+
+        else if (fShape == 4.0)
+            gl_FragColor = nos(fColor);
+
 
     }
 
@@ -103,6 +129,8 @@
         <option value = 0.0>Square</option>
         <option value = 1.0>Circle</option>
         <option value = 2.0>Hollow Square</option>
+        <option value = 3.0>Cross</option>
+        <option value = 4.0>Segmented Circle</option>
     </select>
 
     <br><br>
