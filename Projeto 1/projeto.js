@@ -15,7 +15,9 @@ var colors;
 var auto;
 var sizes;
 var sizeBuffer;
+var rotBuffer;
 var shape;
+var rotate;
 
 window.onload = function init() {
 
@@ -31,6 +33,7 @@ window.onload = function init() {
     vertices = [];
     sizes = [];
     shape = document.getElementById("shapes");
+    rotate = 0.0;
 
 
     // Configure WebGL
@@ -81,6 +84,16 @@ window.onload = function init() {
     gl.vertexAttribPointer(vShape, 1, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vShape);
 
+    //rotation buffer
+    rotBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, rotBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
+
+    // Associate our shader variables with our data buffer - rotation buffer
+    var vSpeed = gl.getAttribLocation(program, "vSpeed");
+    gl.vertexAttribPointer(vSpeed, 1, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vSpeed);
+
     canvas.addEventListener("click", function (e) {
 
         /*
@@ -103,12 +116,13 @@ window.onload = function init() {
 
 
         //sending in the size
-        sizes.push((Math.random() * 50) + 5);
+        sizes.push((Math.random() * 100) + 50);
 
-        /*//sending in the shape
-          gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
-          gl.bufferSubData(gl.ARRAY_BUFFER, 4 * sizes.length,
-              flatten(shapes.value))*/
+        //sending in the shape
+        gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * nVertices,
+            flatten(shapes.value))
+
 
         nVertices++;
     });
@@ -131,18 +145,27 @@ function toggleAutoMode(){
 }
 
 function bloom(){
-    for (i = 0; i < vertices.length; i++){
+
+    rotate += 0.05;
+    for (i = 0; i < sizes.length; i++){
 
         var first = new Date().getTime();
 
-        var sinVal = Math.sin(i + first / 1000);
+        var sinVal = Math.sin(i + first / (500 * 0.6 + 0.5));
 
-        var s = Math.floor(1.25 * sizes[i] + sinVal * sizes[i]);
-
+        var s = Math.floor(sizes[i] + 0.60 * sinVal * sizes[i]);
         var t = [s];
+
+        //sending in the size
         gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
         gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
             flatten(t));
+
+        //sending in the rotation
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, rotBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, 4 * i,
+            flatten([rotate]));
 
     }
 }

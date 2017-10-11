@@ -10,19 +10,22 @@
 
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
-        attribute float vSize;
         attribute vec4 vColor;
+        attribute vec3 sizeShapeSpeed;
+        attribute float vSize;
         attribute float vShape;
+        attribute float vSpeed;
 
         varying float fShape;
         varying vec4 fColor;
-        uniform float time;
+        varying float fSpeed;
 
         void main(){
             gl_Position = vPosition;
-            gl_PointSize = vSize;
             fColor = vColor;
-            fShape = vShape;
+            gl_PointSize = sizeShapeSpeed[0];
+            fShape = sizeShapeSpeed[1];
+            fSpeed = sizeShapeSpeed[2];
         }
     </script>
 
@@ -30,6 +33,7 @@
     precision mediump float;
     varying vec4 fColor;
     varying float fShape;
+    varying float fSpeed;
 
     vec2 getPos(vec2 p){
         return vec2(2.0, -2.0) * p - vec2(1.0, -1.0);
@@ -37,6 +41,13 @@
 
     mat2 rotate2d(float _angle){
       return mat2(cos(_angle),-sin(_angle), sin(_angle),cos(_angle));
+    }
+
+    vec4 hollowSqr(vec4 hsq){
+       float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+       if ( dist <= 1.0 )
+        discard;
+      return hsq;
     }
 
     vec4 circle(vec4 clr) {
@@ -47,12 +58,27 @@
     }
 
     vec4 square(vec4 sqr){
+        vec2 aux = getPos(gl_PointCoord);
+        aux = aux * rotate2d(fSpeed);
+
+        if (aux.s < -0.4 || aux.s > 0.4 || aux.t < -0.4 || aux.t > 0.4)
+            discard;
+
         return sqr;
     }
 
 
+
+
     void main() {
-          gl_FragColor = circle(fColor);
+        if (fShape == 0.0)
+            gl_FragColor = square(fColor);
+
+        else if (fShape == 1.0)
+            gl_FragColor = circle(fColor);
+
+        else if (fShape == 2.0)
+            gl_FragColor = hollowSqr(fColor);
 
     }
 
@@ -66,9 +92,9 @@
 </head>
 <body>
 
-    <canvas id="canvas" width="800" height = "800">
-        Your browser does not support HTML5
-    </canvas>
+<canvas id="canvas" width="800" height = "800">
+    Your browser does not support HTML5
+</canvas>
 
 <div style="position: fixed; top: 10px; left: 820px; ">
     <!-- Shapes -->
@@ -77,8 +103,9 @@
     <br><br>
 
     <select id = "shapes">
-        <option value = 0.0>Quadrado</option>
-        <option></option>
+        <option value = 0.0>Square</option>
+        <option value = 1.0>Circle</option>
+        <option value = 2.0>Hollow Square</option>
     </select>
 
     <br><br>
@@ -90,19 +117,19 @@
 
     <font color = "red"><i>Red</i></font><br>
     <input id = "red" type="range" value = 0.5 max = 1.0 min = 0.0
-    step = 0.0001 onmousemove="changeColors()"><br>
+           step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "green"><i>Green</i></font><br>
     <input id = "green" type="range" value = 0.5 max = 1.0 min = 0.0
-    step = 0.0001 onmousemove="changeColors()"><br>
+           step = 0.0001 onmousemove="changeColors()"><br>
 
     <font color = "blue"><i>Blue</i></font><br>
     <input id = "blue" type="range" value = 0.5 max = 1.0 min = 0.0
-    step = 0.0001 onmousemove="changeColors()"><br>
+           step = 0.0001 onmousemove="changeColors()"><br>
 
     <i>Alpha</i><br>
     <input id = "alpha" type="range" value = 1.0 max = 1.0 min = 0.0
-    step = 0.0001 onmousemove="changeColors()">
+           step = 0.0001 onmousemove="changeColors()">
 
     <br><br>
 
