@@ -12,9 +12,6 @@
         attribute vec4 vPosition;
         attribute vec4 vColor;
         attribute vec3 sizeShapeSpeed;
-        attribute float vSize;
-        attribute float vShape;
-        attribute float vSpeed;
 
         varying float fShape;
         varying vec4 fColor;
@@ -23,9 +20,9 @@
         void main(){
             gl_Position = vPosition;
             fColor = vColor;
-            gl_PointSize = sizeShapeSpeed[0];
-            fShape = sizeShapeSpeed[1];
-            fSpeed = sizeShapeSpeed[2];
+            gl_PointSize = sizeShapeSpeed.x;
+            fShape = sizeShapeSpeed.y;
+            fSpeed = sizeShapeSpeed.z;
         }
     </script>
 

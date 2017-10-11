@@ -4,36 +4,26 @@
 */
 
 var canvas;
-var red;
-var green;
-var blue;
-var alpha;
 var gl;
+var rgba;
 var vertices;
-var nVertices;
-var colors;
 var auto;
-var sizes;
-var sizeBuffer;
-var rotBuffer;
-var shape;
-var rotate;
+var sizeShapeSpeedBuffer;
+var sizeShapeSpeed;
 
 window.onload = function init() {
 
     canvas = document.getElementById("canvas");
     gl = WebGLUtils.setupWebGL(canvas);
     if(!gl) { alert("WebGL isn't available"); }
-    red = document.getElementById("red");
-    green = document.getElementById("green");
-    blue = document.getElementById("blue");
-    alpha = document.getElementById("alpha");
-    nVertices = 0;
+
+    rgba = [document.getElementById("red"),
+        document.getElementById("green"),
+        document.getElementById("blue"),
+        document.getElementById("alpha")];
+    
     auto = false;
     vertices = [];
-    sizes = [];
-    shape = document.getElementById("shapes");
-    rotate = 0.0;
 
 
     // Configure WebGL
@@ -64,35 +54,15 @@ window.onload = function init() {
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
 
-    //size buffer
-    sizeBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+    //sizeShapeSpeed buffer
+    sizeShapeSpeedBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
 
-    // Associate our shader variables with our data buffer - size buffer
-    var vSize = gl.getAttribLocation(program, "vSize");
-    gl.vertexAttribPointer(vSize, 1, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vSize);
-
-    //shape buffer
-    shapeBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
-
-    // Associate our shader variables with our data buffer - shape buffer
-    var vShape = gl.getAttribLocation(program, "vShape");
-    gl.vertexAttribPointer(vShape, 1, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vShape);
-
-    //rotation buffer
-    rotBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, rotBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
-
-    // Associate our shader variables with our data buffer - rotation buffer
-    var vSpeed = gl.getAttribLocation(program, "vSpeed");
-    gl.vertexAttribPointer(vSpeed, 1, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vSpeed);
+    // Associate our shader variables with our data buffer - sizeShapeSpeed buffer
+    sizeShapeSpeed = gl.getAttribLocation(program, "sizeShapeSpeed");
+    gl.vertexAttribPointer(sizeShapeSpeed, 1, gl.FLOAT_VEC3, false, 0, 0);
+    gl.enableVertexAttribArray(sizeShapeSpeed);
 
     canvas.addEventListener("click", function (e) {
 
@@ -116,12 +86,12 @@ window.onload = function init() {
 
 
         //sending in the size
-        sizes.push((Math.random() * 100) + 50);
+        sizeShapeSpeed[0].push((Math.random() * 100) + 50);
 
         //sending in the shape
         gl.bindBuffer(gl.ARRAY_BUFFER, shapeBuffer);
         gl.bufferSubData(gl.ARRAY_BUFFER, 4 * nVertices,
-            flatten(shapes.value))
+            flatten(sizeShapeSpeed[1].value))
 
 
         nVertices++;
@@ -129,6 +99,7 @@ window.onload = function init() {
 
     gl.enable(gl.BLEND);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
     render();
 }
 
@@ -146,14 +117,15 @@ function toggleAutoMode(){
 
 function bloom(){
 
-    rotate += 0.05;
-    for (i = 0; i < sizes.length; i++){
+    sizeShapeSpeed[2][0] += 0.05;
+
+    for (i = 0; i < sizeShapeSpeed[0].length; i++){
 
         var first = new Date().getTime();
 
         var sinVal = Math.sin(i + first / (500 * 0.6 + 0.5));
 
-        var s = Math.floor(sizes[i] + 0.60 * sinVal * sizes[i]);
+        var s = Math.floor(sizeShapeSpeed[0][i] + 0.60 * sinVal * sizeShapeSpeed[0][i]);
         var t = [s];
 
         //sending in the size
