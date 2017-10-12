@@ -89,7 +89,7 @@ function simulateClick() {
 function toggleAutoMode(){
     auto = !auto;
 
-    var active = setInterval(simulateClick, 2000);
+    var active = setInterval(simulateClick, 1500);
 
 }
 
@@ -101,7 +101,7 @@ function clearScreen(){
 
     // Configure WebGL
     gl.viewport(0, 0,canvas.width, canvas.height);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(1.0, 1.0, 0.8, 1.0);
 
     // Load shaders and initialize attribute buffers
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
