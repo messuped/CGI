@@ -13,8 +13,8 @@
         attribute vec4 vColor;
         attribute vec3 sizeShapeSpeed;
 
-        varying float fShape;
         varying vec4 fColor;
+        varying float fShape;
         varying float fSpeed;
 
         void main(){
@@ -28,6 +28,7 @@
 
     <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
+
     varying vec4 fColor;
     varying float fShape;
     varying float fSpeed;
@@ -41,16 +42,18 @@
     }
 
     vec4 nos(vec4 n){
-        float theta = atan(getPos(gl_PointCoord));
 
-        if (theta > 3 || < 6)
-            discard;
 
         return n;
     }
 
     vec4 cross(vec4 crs){
+        vec2 auxpos = getPos(gl_PointCoord) * rotate2d(fSpeed);
+        vec2 aux = vec2(auxpos.s, auxpos.t);
 
+        if ((aux.s > 0.15 || aux.s < -0.15 || aux.t > 0.4 || aux.t < -0.4) &&
+            (aux.t > 0.15 || aux.t < -0.15 || aux.s > 0.4 || aux.s < -0.4))
+            discard;
 
         return crs;
     }
@@ -165,7 +168,8 @@
     <br><br><br>
 
     <!-- Auto -->
-    <button type = "button" onclick="toggleAutoMode()">(╯◕ ³◕）╯︵ ┻━┻</button>
+    <button type = "button" onclick="toggleAutoMode()"><i>Auto</i><br><br> (╯◕ ³◕）╯︵ ┻━┻</button><br><br>
+    <button type = "button" onclick="clearScreen()">Clear Screen</button>
 </div>
 
 </body>

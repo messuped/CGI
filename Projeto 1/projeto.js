@@ -4,14 +4,14 @@
 */
 
 var canvas;
-var gl;
 var rgba;
-var shape;
 var vertices;
 var auto;
+var pointsBuffer;
+var colorBuffer;
 var sizeShapeSpeedBuffer;
-var sizeShapeSpeed;
 var sSS;
+var shape;
 
 window.onload = function init() {
 
@@ -26,54 +26,11 @@ window.onload = function init() {
         document.getElementById("alpha")];
 
     shape = document.getElementById("shapes");
-    auto = false;
-    vertices = [];
-    vSS = [];
 
-
-    // Configure WebGL
-    gl.viewport(0, 0,canvas.width, canvas.height);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
-    // Load shaders and initialize attribute buffers
-    var program = initShaders(gl, "vertex-shader", "fragment-shader");
-    gl.useProgram(program);
-
-    //points buffer
-    var pointsBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, pointsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
-
-    // Associate our shader variables with our data buffer - points buffer
-    var vPosition = gl.getAttribLocation(program, "vPosition");
-    gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vPosition);
-
-    //color buffer
-    var colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
-
-    // Associate our shader variables with our data buffer - color buffer
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
-
-    //sizeShapeSpeed buffer
-    sizeShapeSpeedBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
-
-    // Associate our shader variables with our data buffer - sizeShapeSpeed buffer
-    sizeShapeSpeed = gl.getAttribLocation(program, "sizeShapeSpeed");
-    gl.vertexAttribPointer(sizeShapeSpeed, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(sizeShapeSpeed);
+    clearScreen();
 
     canvas.addEventListener("click", function (e) {
 
-        /*
-        TO BE OPTIMIZED
-        */
         var x = -1 + (2*e.offsetX/canvas.width);
         var y = -1 + (2*(canvas.height - e.offsetY)/canvas.height);
 
@@ -114,8 +71,71 @@ function changeColors(){
         + rgba[3].value + ")";
 }
 
+function simulateClick() {
+    if (auto) {
+        var x = Math.random() * canvas.width;
+        var y = Math.random() * canvas.height;
+
+        var clickEvent = document.createEvent('MouseEvents');
+        clickEvent.initMouseEvent(
+            'click', true, true, window, 0,
+            0, 0, x, y, false, false,
+            false, false, 0, null
+        );
+        document.elementFromPoint(x, y).dispatchEvent(clickEvent);
+    }
+}
+
 function toggleAutoMode(){
     auto = !auto;
+
+    var active = setInterval(simulateClick, 2000);
+
+}
+
+function clearScreen(){
+    auto = false;
+    vertices = [];
+    vSS = [];
+
+
+    // Configure WebGL
+    gl.viewport(0, 0,canvas.width, canvas.height);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+    // Load shaders and initialize attribute buffers
+    var program = initShaders(gl, "vertex-shader", "fragment-shader");
+    gl.useProgram(program);
+
+    //points buffer
+    pointsBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, pointsBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
+
+    // Associate our shader variables with our data buffer - points buffer
+    var vPosition = gl.getAttribLocation(program, "vPosition");
+    gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vPosition);
+
+    //color buffer
+    colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
+
+    // Associate our shader variables with our data buffer - color buffer
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vColor);
+
+    //sizeShapeSpeed buffer
+    sizeShapeSpeedBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, 30000, gl.DYNAMIC_DRAW);
+
+    // Associate our shader variables with our data buffer - sizeShapeSpeed buffer
+    sizeShapeSpeed = gl.getAttribLocation(program, "sizeShapeSpeed");
+    gl.vertexAttribPointer(sizeShapeSpeed, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(sizeShapeSpeed);
 }
 
 function bloom(){
@@ -129,7 +149,7 @@ function bloom(){
         var s = Math.floor(vSS[i][0] + 0.60 * sinVal * vSS[i][0]);
 
         //increasing theta angle
-        vSS[i][2] += 0.1;
+        vSS[i][2] += 0.1 * (Math.random() + 1.0) * Math.sign(vSS[i][2]);
 
         //sending in the size, shape and speed
         gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
