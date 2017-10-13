@@ -27,6 +27,10 @@ window.onload = function init() {
 
     shape = document.getElementById("shapes");
 
+    // Configure WebGL
+    gl.viewport(0, 0,canvas.width, canvas.height);
+    gl.clearColor(1.0, 1.0, 0.6, 1.0);
+
     clearScreen();
 
     canvas.addEventListener("click", function (e) {
@@ -48,7 +52,7 @@ window.onload = function init() {
 
 
         //setting up the vec3
-        vSS.push([(Math.random() * 100) + 50, shape.value, Math.random() - 0.5]);
+        vSS.push([(Math.random() * 100) + 50, shape.value, (Math.random() - 0.5) * 2]);
 
         //sending in the size as 0, shape and speed as is
         gl.bindBuffer(gl.ARRAY_BUFFER, sizeShapeSpeedBuffer);
@@ -89,7 +93,7 @@ function simulateClick() {
 function toggleAutoMode(){
     auto = !auto;
 
-    var active = setInterval(simulateClick, 1500);
+    var active = setInterval(simulateClick, 1000);
 
 }
 
@@ -98,10 +102,6 @@ function clearScreen(){
     vertices = [];
     vSS = [];
 
-
-    // Configure WebGL
-    gl.viewport(0, 0,canvas.width, canvas.height);
-    gl.clearColor(1.0, 1.0, 0.8, 1.0);
 
     // Load shaders and initialize attribute buffers
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
@@ -141,14 +141,10 @@ function clearScreen(){
 function bloom(){
 
     for (i = 0; i < vSS.length; i++){
+        var s = Math.floor(vSS[i][0] + 0.60 * Math.sin(i + new Date().getTime() / 300.0 )
+            * vSS[i][0]);
 
-        var first = new Date().getTime();
-
-        var sinVal = Math.sin(i + first / (500 * 0.6 + 0.5));
-
-        var s = Math.floor(vSS[i][0] + 0.60 * sinVal * vSS[i][0]);
-
-        //increasing theta angle
+        //increasing theta angle in a random fashion for every frame computed
         vSS[i][2] += 0.1 * (Math.random() + 1.0) * Math.sign(vSS[i][2]);
 
         //sending in the size, shape and speed
@@ -159,8 +155,8 @@ function bloom(){
 }
 
 function render() {
+    window.requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.POINTS, 0, vertices.length);
-    window.requestAnimationFrame(render);
     bloom();
 }

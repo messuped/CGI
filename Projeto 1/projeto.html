@@ -71,7 +71,7 @@
         float a = atan(aux.s, aux.t);
         float dist = distance(vec2(0.0,0.0), getPos(gl_PointCoord));
 
-        if (a > 0.5 )
+        if (a < 0.5 )
             discard;
 
         return n;
@@ -92,8 +92,10 @@
        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
        vec2 aux = getPos(gl_PointCoord) * rotate2d(fSpeed);
 
-       if (aux.s < -1.0 || aux.s > 1.0 || aux.t < -1.0 || aux.t > 1.0 || dist <= 1.0)
+       if (aux.s < -1.0 || aux.s > 1.0 || aux.t < -1.0 || aux.t > 1.0 || dist <= 0.9)
             discard;
+
+
 
       return hsq;
     }
@@ -104,6 +106,13 @@
       if (dist > 1.0 )
         discard;
 
+      if (dist > 0.7){
+            clr[3] *= (1.0 - smoothstep(0.8, 1.0, dist))*
+            (1.0 - smoothstep(0.8, 1.0, dist))*
+            (1.0 - smoothstep(0.8, 1.0, dist))*
+            (1.0 - smoothstep(0.8, 1.0, dist));
+         }
+
       return clr;
     }
 
@@ -112,6 +121,13 @@
 
         if (aux.s < -0.7 || aux.s > 0.7 || aux.t < -0.7 || aux.t > 0.7)
             discard;
+
+        if (aux.s < -0.55 || aux.s > 0.55 || aux.t < -0.55 || aux.t > 0.55){
+            sqr[3] *= (1.0 - smoothstep(0.55, 0.75, aux.s))*
+            (1.0 - smoothstep(-0.55, -0.75, aux.s))*
+            (1.0 - smoothstep(0.55, 0.75, aux.t))*
+            (1.0 - smoothstep(-0.55, -0.75, aux.t));
+         }
 
         return sqr;
     }
@@ -152,13 +168,14 @@
     <script src="projeto.js"></script>
 
 </head>
-<body>
+</bod>
 
 <canvas id="canvas" width="800" height = "800">
     Your browser does not support HTML5
 </canvas>
 
-<div style="position: fixed; top: 10px; left: 820px; ">
+<div class = "bordered" style="border-radius: 8px; border-width: 6px; border-color: rgb(255, 255, 153);
+border-style: inset; padding: 20px; position: fixed; top: 10px; left: 820px; ">
     <!-- Shapes -->
     <font size = "14"><i>Shapes </i></font>
 
@@ -167,10 +184,10 @@
     <select id = "shapes">
         <option value = 0.0>Square</option>
         <option value = 1.0>Circle</option>
-        <option value = 2.0>Hollow Square</option>
+        <option value = 2.0>Jagged Wheel</option>
         <option value = 3.0>Cross</option>
         <option value = 4.0>Segmented Circle</option>
-        <option value = 5.0>The Subtil</option>
+        <option value = 5.0>The Subtle</option>
         <option value = 6.0>Tardis Triangle</option>
     </select>
 
@@ -201,13 +218,13 @@
 
     <!-- Preview -->
     <div id = "preview" style = "width: 130px; height: 30px;
-        background-color: grey"/>
+        background-color: grey"></div>
 
-    <br><br><br>
+    <br><br>
 
     <!-- Auto -->
     <button type = "button" onclick="toggleAutoMode()"><i>Auto</i><br><br> (╯◕ ³◕）╯︵ ┻━┻</button><br><br>
-    <button type = "button" onclick="clearScreen()">Clear Screen</button>
+    <button type = "button" onclick="clearScreen()">Clear Screen<br><br>(∩☯ω☯)⊃━☆ﾟ.*</button>
 </div>
 
 </body>
