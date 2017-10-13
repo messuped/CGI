@@ -65,13 +65,30 @@
         return sub;
     }
 
+    vec4 happy(vec4 h){
+        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+        float angle = atan(gl_PointCoord.s, gl_PointCoord.t);
+
+        if (dist > 1.0 || angle > 1.0)
+            discard;
+
+        return h;
+    }
+
+    vec4 ring (vec4 r){
+        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+
+        if (dist > 1.0 || dist < 0.6)
+            discard;
+
+        return r;
+    }
+
     vec4 nos(vec4 n){
-        vec2 aux = rotate2d(fSpeed) * vec2(gl_PointCoord.s, gl_PointCoord.t);
+        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
+        float angle = atan(gl_PointCoord.s, gl_PointCoord.t);
 
-        float a = atan(aux.s, aux.t);
-        float dist = distance(vec2(0.0,0.0), getPos(gl_PointCoord));
-
-        if (a < 0.5 )
+        if (dist > 1.0 || dist < 0.6)
             discard;
 
         return n;
@@ -103,7 +120,7 @@
     vec4 circle(vec4 clr) {
       float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
 
-      if (dist > 1.0 )
+      if (dist > 1.0)
         discard;
 
       if (dist > 0.7){
@@ -157,6 +174,14 @@
         else if (fShape == 6.0)
             gl_FragColor = tardisTriangle(fColor);
 
+        else if (fShape == 7.0)
+            gl_FragColor = happy(fColor);
+
+        else if (fShape == 8.0)
+            gl_FragColor = ring(fColor);
+
+
+
 
     }
 
@@ -189,6 +214,9 @@ border-style: inset; padding: 20px; position: fixed; top: 10px; left: 820px; ">
         <option value = 4.0>Segmented Circle</option>
         <option value = 5.0>The Subtle</option>
         <option value = 6.0>Tardis Triangle</option>
+        <option value = 7.0>Happy</option>
+        <option value = 8.0>Ring</option>
+        <option value = 9.0>TBD</option>
     </select>
 
     <br><br>

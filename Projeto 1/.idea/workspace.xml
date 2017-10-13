@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e397716-a4a0-4a36-acb6-f2307def3c10" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projeto.html" afterPath="$PROJECT_DIR$/projeto.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projeto.js" afterPath="$PROJECT_DIR$/projeto.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="projeto.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="projeto.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/projeto.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-268">
-              <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state relative-caret-position="406">
+              <caret line="90" column="36" lean-forward="false" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#html#0;n#!!top" expanded="true" />
@@ -31,11 +29,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="projeto.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MV.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Common/MV.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="17" column="1" lean-forward="true" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="projeto.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/projeto.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="73" column="42" lean-forward="false" selection-start-line="73" selection-start-column="42" selection-end-line="73" selection-end-column="42" />
+            <state relative-caret-position="-404">
+              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding>
                 <element signature="n#!!block;n#clearScreen#0" expanded="false" />
               </folding>
@@ -71,8 +79,8 @@
         <option value="$PROJECT_DIR$/Common/webgl-utils.js" />
         <option value="$PROJECT_DIR$/Common/initShaders.js" />
         <option value="$PROJECT_DIR$/Common/MV.js" />
-        <option value="$PROJECT_DIR$/projeto.html" />
         <option value="$PROJECT_DIR$/projeto.js" />
+        <option value="$PROJECT_DIR$/projeto.html" />
       </list>
     </option>
   </component>
@@ -188,12 +196,12 @@
       <workItem from="1507842727922" duration="1602000" />
       <workItem from="1507844438222" duration="66000" />
       <workItem from="1507881386515" duration="810000" />
-      <workItem from="1507889820728" duration="8926000" />
+      <workItem from="1507889820728" duration="10641000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55719000" />
+    <option name="totallyTimeSpent" value="57434000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="961" y="0" width="959" height="1053" extended-state="4" />
@@ -527,13 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/MV.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14685">
-          <caret line="980" column="0" lean-forward="false" selection-start-line="980" selection-start-column="0" selection-end-line="980" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Common/webgl-utils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2010">
@@ -541,23 +542,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/projeto.html">
+    <entry file="file://$PROJECT_DIR$/projeto.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-268">
-          <caret line="78" column="0" lean-forward="true" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+        <state relative-caret-position="-404">
+          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#clearScreen#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/projeto.js">
+    <entry file="file://$PROJECT_DIR$/Common/MV.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="73" column="42" lean-forward="false" selection-start-line="73" selection-start-column="42" selection-end-line="73" selection-end-column="42" />
+        <state relative-caret-position="240">
+          <caret line="17" column="1" lean-forward="true" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/projeto.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="90" column="36" lean-forward="false" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
           <folding>
-            <element signature="n#!!block;n#clearScreen#0" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
