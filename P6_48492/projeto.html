@@ -81,17 +81,13 @@
         if (dist > 1.0 || dist < 0.6)
             discard;
 
+        if (dist < 0.8){
+            r.x = 1.0 - r.x;
+            r.y = 1.0 - r.y;
+            r.z = 1.0 - r.z;
+        }
+
         return r;
-    }
-
-    vec4 nos(vec4 n){
-        float dist = distance( vec2(0.0,0.0), getPos(gl_PointCoord));
-        float angle = atan(gl_PointCoord.s, gl_PointCoord.t);
-
-        if (dist > 1.0 || dist < 0.6)
-            discard;
-
-        return n;
     }
 
     vec4 cross(vec4 crs){
@@ -149,9 +145,6 @@
         return sqr;
     }
 
-
-
-
     void main() {
         if (fShape == 0.0)
             gl_FragColor = square(fColor);
@@ -166,18 +159,15 @@
             gl_FragColor = cross(fColor);
 
         else if (fShape == 4.0)
-            gl_FragColor = nos(fColor);
-
-        else if (fShape == 5.0)
             gl_FragColor = subtil(fColor);
 
-        else if (fShape == 6.0)
+        else if (fShape == 5.0)
             gl_FragColor = tardisTriangle(fColor);
 
-        else if (fShape == 7.0)
+        else if (fShape == 6.0)
             gl_FragColor = happy(fColor);
 
-        else if (fShape == 8.0)
+        else if (fShape == 7.0)
             gl_FragColor = ring(fColor);
 
 
@@ -211,12 +201,10 @@ border-style: inset; padding: 20px; position: fixed; top: 10px; left: 820px; ">
         <option value = 1.0>Circle</option>
         <option value = 2.0>Jagged Wheel</option>
         <option value = 3.0>Cross</option>
-        <option value = 4.0>Segmented Circle</option>
-        <option value = 5.0>The Subtle</option>
-        <option value = 6.0>Tardis Triangle</option>
-        <option value = 7.0>Happy</option>
-        <option value = 8.0>Ring</option>
-        <option value = 9.0>TBD</option>
+        <option value = 4.0>The Subtle</option>
+        <option value = 5.0>Tardis Triangle</option>
+        <option value = 6.0>Happy</option>
+        <option value = 7xxxxxxxxxxxxxxxxxxxxxxxx.0>Ring</option>
     </select>
 
     <br><br>
